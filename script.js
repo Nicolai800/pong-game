@@ -2,6 +2,7 @@
 const startText = document.getElementById("startText");
 const paddle1 = document.getElementById("paddle1");
 const paddle2 = document.getElementById("paddle2");
+const ball = document.getElementById("ball");
 
 // Game Variables
 let gameRunning = false;
@@ -17,6 +18,10 @@ const paddleDeceleration = 1;
 const maxPaddleSpeed = 5;
 const gameHeigth = 400;
 const gameWidth = 600;
+let ballX = 290;
+let ballSpeedX = 2;
+let ballY = 290;
+let ballSpeedY = 2;
 
 document.addEventListener("keydown", startGame);
 document.addEventListener("keydown", handleKeyDown);
@@ -34,6 +39,7 @@ function gameLoop() {
   if (gameRunning) {
     updatePaddle1();
     updatePaddle2();
+    moveBall();
     setTimeout(gameLoop, 8);
   }
 }
@@ -88,3 +94,31 @@ function updatePaddle2() {
   }
   paddle2.style.top = paddle2Y + "px";
 }
+
+function moveBall() {
+  ballX += ballSpeedX;
+  ballY += ballSpeedY;
+
+  if (ballY >= gameHeigth - ball.clientHeight || ballY <= 0) {
+    ballSpeedY = -ballSpeedY;
+  }
+  if (
+    ballX >= gameWidth - paddle2.clientWidth - ball.clientWidth &&
+    ballY >= paddle2Y &&
+    ballY <= paddle2Y + paddle2.clientHeight
+  ) {
+    ballSpeedX = -ballSpeedX;
+  }
+  if (
+    ballX <= paddle1.clientWidth &&
+    ballY >= paddle1Y &&
+    ballY <= paddle1Y + paddle1.clientHeight
+  ) {
+    ballSpeedX = -ballSpeedX;
+  }
+
+  ball.style.left = ballX + "px";
+  ball.style.top = ballY + "px";
+}
+
+console.log(paddle2.clientWidth);
